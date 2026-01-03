@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/style_sp.css">
+    <title>出席確認画面</title>
+
+    <script nonce="" type="text/javascript">
+        $(() => {
+            showIfExists("completeModal");
+            showIfExists("errorModal");
+            $("#attend").click(() => {
+                showModal("confirmModal");
+                $("#ok_confirmModal").click((event) => {
+                    $("form").submit();
+                    closeModal($(event.target));
+                });
+            });
+        });
+    </script>
+    <script nonce="" type="text/javascript">
+        function showModal(id) {
+            const $modal = document.getElementById(id);
+            $modal.showModal();
+            requestAnimationFrame(() => {
+                $modal.classList.remove('-closing');
+            });
+        }
+
+        function closeModal(id) {
+            const $modal = document.getElementById(id);
+            $modal.addEventListener('transitionend', $modal.close, { once: true });
+            $modal.classList.add('-closing');
+        }
+
+        function showIfExists(id) {
+            let modal = $("#" + id);
+            if (modal.length > 0) {
+                showModal(id);
+            }
+        }
+
+        function attend() {
+            button = document.getElementById("attend");
+            button.disabled = true;
+            button.textContent = " 出 席 済 ";
+        }
+
+        $(() => {
+            $("form").submit(() => {
+                $("button").attr("disabled", "disabled");
+            });
+            $("[id^=close_]").click(function () { closeModal(this); });
+        });
+    </script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header_top">
+                <img class="header_chibait" src="../img/icon.png" alt="千葉工業大学">
+                <h1 class="header_title">出欠管理システム</h1>
+                <div class="help_link"><a href="../manual.pdf"
+                        target="manual">マニュアル</a></div>
+            </div>
+            <div class="header_bottom">
+                <div id="header_bottomDate" class="header_bottomDate"></div>
+
+                <form action="../login/index.html" method="post"><input type="hidden"
+                        name="_csrf"
+                        value="ZJ-36h3yWWbrfWE37UI5M2MggnaXSmcrrVlWfn_PjNttFGCRVKqOjyjAbALGGQMGj28NUAYUrxemcwMGnjsyHBn_u79dcVPz">
+                    <button type="submit" class="button header_button" name="logout">
+                        <img src="../img/icon-logout.svg" alt="ログアウト">ログアウト</button>
+                </form>
+
+            </div>
+        </div>
+
+    </header>
+
+
+    <dialog id="confirmModal" class="dialog -closing">
+        <div>
+            <div class="dialog_header">
+                <h4 class="modal-title style_color_w">出席確認</h4>
+            </div>
+            <div class="dialog_body">
+                <div class="dialog_content">5-6限 ６３１講義室 データベース工学 13:00 ～ 15:00 の授業を出席状態にしますか？</div>
+
+            </div>
+            <div class="dialog_footer">
+
+
+                <div>
+                    <button type="button" class="button button_primary" id="ok_confirmModal" onclick="closeModal('confirmModal'); showModal('completeModal'); attend()">
+                        登録する
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="button button_secondary" id="close_confirmModal" onclick="closeModal('confirmModal')">
+                        やめる
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+    </dialog>
+
+
+
+
+    <dialog id="completeModal" class="dialog -closing">
+        <div>
+            <div class="dialog_header">
+                <h4 class="modal-title style_color_w">出席確認</h4>
+            </div>
+            <div class="dialog_body">
+                <div class="dialog_content">5-6限 ６３１講義室 データベース工学 13:00 ～ 15:00 の授業を出席状態にしました。</div>
+
+            </div>
+            <div class="dialog_footer">
+
+
+                <div>
+                    <button type="button" class="button button_primary" id="ok_completeModal" onclick="closeModal('completeModal')">
+                        OK
+                    </button>
+                </div>
+
+
+            </div>
+        </div>
+    </dialog>
+
+
+
+
+    <div class="main">
+        <div class="container">
+            <table class="table_list">
+                <tbody>
+                    <tr>
+                        <td>時限：</td>
+                        <td>5-6限</td>
+                    </tr>
+                    <tr>
+                        <td>教室名：</td>
+                        <td>６３１講義室</td>
+                    </tr>
+                    <tr>
+                        <td>授業名：</td>
+                        <td>データベース工学</td>
+                    </tr>
+                    <tr>
+                        <td>開始時刻：</td>
+                        <td>13:00</td>
+                    </tr>
+                    <tr>
+                        <td>終了時刻：</td>
+                        <td>15:00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="message">システム上に上記授業の履修が登録されていないため仮登録となります。履修が確定すると出席が確定します。</p>
+
+
+            <form action="https://attendance.is.it-chiba.ac.jp/attendance/attend" method="post" class="text-bg-info">
+                <input type="hidden" name="_csrf"
+                    value="ZJ-36h3yWWbrfWE37UI5M2MggnaXSmcrrVlWfn_PjNttFGCRVKqOjyjAbALGGQMGj28NUAYUrxemcwMGnjsyHBn_u79dcVPz">
+                <button type="button" class="button button_primary button_fullwidth" id="attend" onclick="showModal('confirmModal')">
+                    <img src="../img/icon-check.svg" alt="出席で登録する">出席で登録する</button>
+
+            </form>
+        </div>
+
+
+    </div>
+    <script src="../js/time.js"></script>
+</body>
+
+</html>

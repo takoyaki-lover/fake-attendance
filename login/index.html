@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/style_sp.css">
+    <title>ログイン</title>
+
+    <script nonce="" type="text/javascript">
+        $(() => {
+            $('[name=username],[name=password]').keyup(e => {
+                if ($('[name=username],[name=password]').filter((i, elem) => !$(elem).val()).length > 0) {
+                    $('[name=login]').attr("disabled", "disabled");
+                } else {
+                    $('[name=login]').removeAttr("disabled");
+                }
+            });
+            showIfExists("errorModal");
+        });
+    </script>
+    <script nonce="" type="text/javascript">
+        function showModal(id) {
+            const $modal = document.getElementById(id);
+            $modal.showModal();
+            requestAnimationFrame(() => {
+                $modal.classList.remove('-closing');
+            });
+        }
+
+        function closeModal(btn) {
+            id = $(btn).attr("id").replace(/^.+_/g, "");
+            const $modal = $("#" + id).get(0);
+            $modal.addEventListener('transitionend', $modal.close, { once: true });
+            $modal.classList.add('-closing');
+        }
+
+        function showIfExists(id) {
+            let modal = $("#" + id);
+            if (modal.length > 0) {
+                showModal(id);
+            }
+        }
+
+        $(() => {
+            $("form").submit(() => {
+                $("button").attr("disabled", "disabled");
+            });
+            $("[id^=close_]").click(function () { closeModal(this); });
+        });
+    </script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header_top">
+                <img class="header_chibait" src="../img/icon.png" alt="千葉工業大学">
+                <h1 class="header_title">出欠管理システム</h1>
+                <div class="help_link"><a href="../manual.pdf"
+                        target="manual">マニュアル</a></div>
+            </div>
+            <div class="header_bottom">
+                <div class="header_bottomDate"></div>
+
+            </div>
+        </div>
+
+    </header>
+
+    <form action="../top/index.html" method="post" class="text-bg-info"><input
+            type="hidden" name="_csrf"
+            value="GS_Z9y67I_32d8RD6O5I3TFHkZLjPMRMRcEvYinDUzNiDyD2eB3gz0qPF8jbT_V32sN86gJzvPDUX_RhI_gaBhr7ZgNTaUaQ">
+        <div class="main">
+            <div class="container login">
+                <div class="formsetList">
+                    <div class="formset">
+                        <label for="userid">ユーザID</label>
+                        <input type="text" id="userid" name="username" class="form_input" placeholder="ユーザID"
+                            autocomplete="on" value="">
+                    </div>
+                    <div class="formset">
+                        <label for="password">パスワード</label>
+                        <input type="password" id="password" name="password" class="form_input" placeholder="パスワード"
+                            autocomplete="off">
+                    </div>
+                    <div class="form_check">
+                        <input type="checkbox" name="keeplogin" id="rememberMeCheckbox">
+                        <label for="rememberMeCheckbox" class="form_label">&nbsp;ログイン状態を維持する</label>
+                    </div>
+                </div>
+                <button type="submit" class="button button_primary button_fullwidth" name="login">
+                    <img src="../img/icon-login.svg" alt="ログイン">ログイン</button>
+            </div>
+        </div>
+    </form>
+
+
+</body>
+
+</html>
